@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 
+	// required for sqlx
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 )
@@ -14,10 +15,13 @@ var (
 	ErrNotFoundOrNoOp = errors.New("entity not found or no op")
 )
 
+// Query represent an SQL query
 type Query int
 
 const (
+	// CreateDatabase query to create the database
 	CreateDatabase Query = iota
+	// CreateGeolocations query to create the Geolocations table
 	CreateGeolocations
 )
 

@@ -8,6 +8,7 @@ import (
 	validator "gopkg.in/go-playground/validator.v9"
 )
 
+// GeolocationController implements the endpoints related to the geolocation
 type GeolocationController struct {
 	validator *validator.Validate
 
@@ -15,6 +16,7 @@ type GeolocationController struct {
 	geolocator Geolocator
 }
 
+// NewGeolocationController instantiate a valid GeolocationController
 func NewGeolocationController(repo Repository, geolocator Geolocator) *GeolocationController {
 	return &GeolocationController{
 		validator:  validator.New(),
@@ -23,10 +25,14 @@ func NewGeolocationController(repo Repository, geolocator Geolocator) *Geolocati
 	}
 }
 
+// GetByIPRequest is the input for the GetByIP endpoint
 type GetByIPRequest struct {
 	IP string `json:"-" validate:"required,ip"`
 }
 
+// GetByIP will lookup in the persistent layer if the IP has already been
+// searched, otherwise it will ask the Geolocator to retrieve the geolocation
+// and save it for the next usage.
 func (g *GeolocationController) GetByIP(req *GetByIPRequest) *Response {
 	if err := g.validator.Struct(req); err != nil {
 		return NewResponse().WithErr(err, "invalid_parameters").

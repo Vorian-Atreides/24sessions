@@ -5,7 +5,9 @@ import (
 )
 
 const (
+	// CreateGeolocation query to insert a new Geolocation
 	CreateGeolocation Query = 100 + iota
+	// GetGeolocationByIP query to retrieve a geolocation by its IP
 	GetGeolocationByIP
 )
 
@@ -20,6 +22,7 @@ var geolocationQueries = map[Query]string{
 	`,
 }
 
+// CreateGeolocation insert a new Geolocation
 func (m *MySQL) CreateGeolocation(location *backend.Geolocation) error {
 	query := &Geolocation{}
 	query.FromModel(location)
@@ -27,6 +30,7 @@ func (m *MySQL) CreateGeolocation(location *backend.Geolocation) error {
 	return err
 }
 
+// GetGeolocationByIP retrieve a geolocation by its IP
 func (m *MySQL) GetGeolocationByIP(ip string) (*backend.Geolocation, error) {
 	location := &Geolocation{}
 	query := &Geolocation{IP: ip}
