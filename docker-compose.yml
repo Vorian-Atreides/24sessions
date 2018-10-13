@@ -1,0 +1,42 @@
+version: '2'
+
+services:
+  dev:
+    extends: frontend
+    depends_on:
+      - backend
+
+  backend:
+    build: ./backend
+    depends_on:
+      - mysql
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: mysql
+      DB_USERNAME: test_user
+      DB_PASSWORD: secret
+      DB_DATABASE: test
+      API_TOKEN: 00dfa9010b2e69
+
+  ## Frontend produce a production's container, an approach with mounted volumes
+  ## would be better for dev environment
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+
+  ## Databases
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test_user
+      MYSQL_PASSWORD: secret
+      MYSQL_DATABASE: test
+
+volumes:
+  mysql:
+    external: true
